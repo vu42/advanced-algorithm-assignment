@@ -15,14 +15,18 @@ def _cell_centers(cells: List[Coord]) -> Tuple[np.ndarray, np.ndarray]:
     return xs, ys
 
 
-def plot_map(grid: GridMap, ax: Optional[plt.Axes] = None, title: Optional[str] = None):
+def plot_map(grid: GridMap, ax: Optional[plt.Axes] = None, title: Optional[str] = None, show_coords: bool = True):
     if ax is None:
         fig, ax = plt.subplots(figsize=(7, 7))
     ax.imshow(grid.occ, cmap="gray_r", origin="upper")  # obstacles appear dark
     ax.set_xlim(-0.5, grid.spec.width - 0.5)
     ax.set_ylim(grid.spec.height - 0.5, -0.5)
     ax.set_aspect("equal")
-    ax.axis("off")
+    if show_coords:
+        ax.set_xlabel("X (tile index)")
+        ax.set_ylabel("Y (tile index)")
+    else:
+        ax.axis("off")
     if title:
         ax.set_title(title)
     return ax
