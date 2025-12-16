@@ -193,8 +193,9 @@ $$
 In the BA* algorithm, the robot's environment is divided into "valid" and "invalid" states. The Free Space ($C_{\text{free}}$) represents the set of all "valid" configurations—meaning every possible position and orientation where the robot can physically exist without crashing into a wall or object.
 
 The mathematical definition is:
+
 $$
-C_{\text{free}}=\left\{ q\in C \;\middle|\; A(q)\cap\left(\bigcup_i O_i\right)=\varnothing \right\}
+C_{\text{free}} = \left\{ q\in C \;\middle|\; A(q)\cap\left(\bigcup_i O_i\right)=\varnothing \right\}
 $$
 
 Where:
@@ -210,15 +211,19 @@ Where:
 ### Covered vs visited and a consistent discovered state
 
 To make predicates like “blocked”, “covered”, and “uncovered” explicit, we maintain a discovered tiling state as a partial function:
+
 $$
-\hat{M}:\mathbb{Z}^2 \to \{\text{unknown},\text{covered},\text{obstacle}\}.
+\hat{M}:\mathbb{Z}^2 \to \{ \text{unknown}, \text{covered}, \text{obstacle} \}
 $$
 
 From $\hat{M}$ we derive:
+
 $$
-C_{\text{cov}}=\{s: \hat{M}(s)=\text{covered}\},\quad
-C_{\text{obs}}=\{s: \hat{M}(s)=\text{obstacle}\},\quad
-C_{\text{unk}}=\{s: \hat{M}(s)=\text{unknown}\}.
+\begin{aligned}
+C_{\text{cov}} &= \{ s: \hat{M}(s)=\text{covered} \}, \\
+C_{\text{obs}} &= \{ s: \hat{M}(s)=\text{obstacle} \}, \\
+C_{\text{unk}} &= \{ s: \hat{M}(s)=\text{unknown} \}.
+\end{aligned}
 $$
 
 In this report, the “current tiling model” used by BA* for planning is the covered set:
@@ -226,11 +231,13 @@ $$
 M \equiv C_{\text{cov}}.
 $$
 
-We use the convention from the draft that a **blocked position** is “either an obstacle or a covered tile”:
+We use the convention from the draft that a blocked position is "either an obstacle or a covered tile":
+
 $$
-\text{isBlocked}(s)\iff \hat{M}(s)\in\{\text{covered},\text{obstacle}\},
-\qquad
-\text{isUncovered}(s)\iff \hat{M}(s)=\text{unknown}.
+\begin{aligned}
+\text{isBlocked}(s) &\iff \hat{M}(s)\in \{ \text{covered}, \text{obstacle} \}, \\
+\text{isUncovered}(s) &\iff \hat{M}(s)=\text{unknown}.
+\end{aligned}
 $$
 
 The key invariant emphasized in this report is:
@@ -264,6 +271,7 @@ The coverage process continues until BM can no longer extend the sweep without h
 ### Critical point definition
 
 A tile $s$ is treated as a **critical point** when it is locally enclosed by blocked tiles in the 4-neighborhood. The formal definition is:
+
 $$
 s \text{ is critical } \iff \forall s'\in N_4(s),\ \text{isBlocked}(s').
 $$
@@ -323,9 +331,12 @@ b(s_i,s_j)=
 $$
 
 Using $\hat{M}$, one concrete realization used in the draft is:
+
 $$
-s_i \text{ is free } \iff \hat{M}(s_i)=\text{unknown},\qquad
-s_j \text{ is blocked } \iff \hat{M}(s_j)\in\{\text{covered},\text{obstacle}\}.
+\begin{aligned}
+s_i \text{ is free } &\iff \hat{M}(s_i)=\text{unknown}, \\
+s_j \text{ is blocked } &\iff \hat{M}(s_j)\in \{ \text{covered}, \text{obstacle} \}.
+\end{aligned}
 $$
 
 Where: 
@@ -338,7 +349,9 @@ Where:
 
 
 ### Corner detector $\mu(s)$
+
 The draft defines a corner score $\mu(s)$ by summing boundary indicators on selected neighbor pairs:
+
 $$
 \mu(s)=b(s_1,s_8)+b(s_1,s_2)+b(s_5,s_6)+b(s_5,s_4)+b(s_7,s_6)+b(s_7,s_8).
 $$
@@ -352,6 +365,7 @@ Where:
 
 ### List Construction
 A tile is added to the backtracking list when it is a “corner-like” boundary point:
+
 $$
 L=\{ s \mid s\in M \text{ and } \mu(s)\ge 1 \}.
 $$
@@ -393,9 +407,11 @@ The robot looks at its "To-Do List" and picks the easiest (closest/cheapest) loc
 ---
 
 In practice, the selection is often based on the shortest backtracking path length computed on the tiling graph:
+
 $$
 J(s_{cp},s)=\text{len}\big(\hat{P}(s_{cp}\to s)\big),
 $$
+
 $$
 s_{sp}=\arg\min_{s\in L} J(s_{cp},s).
 $$
