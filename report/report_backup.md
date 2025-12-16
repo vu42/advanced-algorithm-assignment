@@ -33,22 +33,9 @@ This section presents the BA* algorithm as used in our implementation. The metho
 To illustrate every step of the algorithm, we will track a single scenario:
 
 * **Unified Scenario:** A robot named "Bot" with radius $r=5$ (diameter $10$) operates in a room.
-* **Phase 1 (Start):** Bot starts at $(12, 75)$ facing East.
-* **Phase 2 (Stuck):** Later, Bot ends up at $(88, 1)$ and gets stuck (Critical Point).
-* **Phase 3 (Recovery):** Bot calculates a plan to return to a safe spot at $(52, 1)$.
-
-Run summary (from `summary.json`):
-
-* Total steps: $7505$.
-* Coverage rate: $1.0$.
-* Total path length: $7505.0$.
-* Number of backtracking events: $10$.
-* First backtracking event statistics:
-  * $s_{cp}=(88, 1)$.
-  * $s_{sp}=(52, 1)$.
-  * Number of candidates: $32$.
-  * A* path length (tile steps): $37$.
-  * Smoothed path length (waypoints): $2$.
+* **Phase 1 (Start):** Bot starts at $(10, 10)$ facing East.
+* **Phase 2 (Stuck):** Later, Bot ends up at $(50, 50)$ and gets stuck (Critical Point).
+* **Phase 3 (Recovery):** Bot calculates a plan to return to a safe spot at $(40, 50)$.
 
 ---
 
@@ -115,19 +102,17 @@ BA* uses a discrete heading set aligned with the four cardinal directions. In th
 
 ### Unified Example: Phase 1 (Movement)
 
-![Phase 1 Movement](../outputs/fig_phase1_movement.png)
-
-**Scenario:** Our robot starts at $(12,75)$ facing East. It rotates North and moves forward one step.
+**Scenario:** Our robot starts at $(10,10)$ facing East. It rotates North and moves forward one step.
 
 1.  **Initial State:**
-    $$q_{\text{start}}=\begin{bmatrix}12 \\ 75 \\ 0\end{bmatrix}.$$
+    $$q_{\text{start}}=\begin{bmatrix}10 \\ 10 \\ 0\end{bmatrix}.$$
 
 2.  **Rotation:** Rotate to face North ($\alpha=\pi/2$).
     $$
     q_{\text{rotated}}=
     \begin{bmatrix}
-    12 \\
-    75 \\
+    10 \\
+    10 \\
     0
     \end{bmatrix}
     +
@@ -138,8 +123,8 @@ BA* uses a discrete heading set aligned with the four cardinal directions. In th
     \end{bmatrix}
     =
     \begin{bmatrix}
-    12 \\
-    75 \\
+    10 \\
+    10 \\
     \pi/2
     \end{bmatrix}.
     $$
@@ -148,8 +133,8 @@ BA* uses a discrete heading set aligned with the four cardinal directions. In th
     $$
     q_{\text{final}}=
     \begin{bmatrix}
-    12 \\
-    75 \\
+    10 \\
+    10 \\
     \pi/2
     \end{bmatrix}
     +
@@ -160,11 +145,13 @@ BA* uses a discrete heading set aligned with the four cardinal directions. In th
     \end{bmatrix}
     =
     \begin{bmatrix}
-    12 \\
-    80 \\
+    10 \\
+    15 \\
     \pi/2
     \end{bmatrix}.
     $$
+
+---
 
 ## Discrete tiling model $M$
 
@@ -238,20 +225,18 @@ The key invariant emphasized in this report is:
 
 ### Unified Example: Phase 1 (Tiling)
 
-![Phase 1 Tiling](../outputs/fig_phase1_tiling.png)
-
 **Scenario:** Continuing from Phase 1, the robot creates tiles as it moves.
 
-1.  **Tile 1:** When at $(12, 75)$, it stamped:
-    $$s_1 = (12, 75, 10).$$
-    *(Center 12,75; Size 10)*
-
-2.  **Tile 2:** After moving to $(12, 80)$, it stamps:
-    $$s_2 = (12, 80, 10).$$
-
+1.  **Tile 1:** When at $(10, 10)$, it stamped:
+    $$s_1 = (10, 10, 10).$$
+    *(Center 10,10; Size 10)*
+2.  **Tile 2:** After moving to $(10, 15)$, it stamps:
+    $$s_2 = (10, 15, 10).$$
 3.  **Update Map:**
-    $$M = \{ (12, 75, 10), (12, 80, 10) \}.$$
+    $$M = \{ (10, 10, 10), (10, 15, 10) \}.$$
     The map $M$ now contains these two discrete squares.
+
+---
 
 ## Boustrophedon motion as coverage mode
 
@@ -278,17 +263,16 @@ Where:
 
 ### Unified Example: Phase 2 (Stuck)
 
-![Phase 2 Stuck](../outputs/fig_phase2_stuck.png)
+**Scenario:** Time has passed. The robot is now deep in the room at **$(50, 50)$**. It needs to check if it is stuck.
 
-**Scenario:** Time has passed. The robot is now at **$(88, 1)$**. It needs to check if it is stuck.
-
-1.  **Current Tile:** $s = (88, 1, 10)$.
-
+1.  **Current Tile:** $s = (50, 50, 10)$.
 2.  **Neighbors ($N_4$):**
-    The algorithm checks the four cardinal neighbors in $N_4(s)$. If all 4 neighbors are blocked, then $s$ is a critical point.
-
-3.  **Result:** Since this run reports a critical point at $(88, 1)$, we treat:
-    $$\text{isCritical}(88, 1) = \text{True}.$$
+    * **North $(50, 60)$:** Sensor sees a wall $\rightarrow$ **Blocked**.
+    * **South $(50, 40)$:** Map says visited $\rightarrow$ **Blocked**.
+    * **East $(60, 50)$:** Map says visited $\rightarrow$ **Blocked**.
+    * **West $(40, 50)$:** Map says visited $\rightarrow$ **Blocked**.
+3.  **Result:** All 4 neighbors are blocked.
+    $$\text{isCritical}(50, 50) = \text{True}.$$
     The robot declares a **Critical Point** and stops sweeping.
 
 ---
@@ -358,15 +342,18 @@ $$
 
 ### Unified Example: Phase 2 (List Check)
 
-![Phase 2 List Check](../outputs/fig_phase2_list_check.png)
+**Scenario:** The robot is stuck at $(50, 50)$, so it checks its memory $M$ for backtracking candidates. It analyzes the tile at **$(40, 50)$** (West of current).
 
-**Scenario:** The robot is stuck at $(88, 1)$, so it checks its accumulated knowledge to form backtracking candidates. In the run summary, the selected starting point is $(52, 1)$.
-
-1.  **Analyze Tile:** $s = (52, 1)$.
-
-2.  **Corner-like condition (illustration):** A tile can be inserted into $L$ when it forms a boundary corner pattern. For example, if for some neighbor pair $(s_i,s_j)$ the first is Free and the second is Blocked, then $b(s_i,s_j)=1$ and this contributes to $\mu(s)$.
-
-3.  **Result:** Under any local neighborhood where $\mu(52, 1) \ge 1$, the tile $(52, 1)$ is eligible to be added to $L$.
+1.  **Analyze Tile:** $s = (40, 50)$.
+2.  **Neighbors of $(40, 50)$:**
+    * $s_1$ (East): $(50, 50)$ is **Blocked** (Current pos).
+    * $s_5$ (West): $(30, 50)$ is **Free** (Unknown area!).
+    * $s_4$ (North-West): $(30, 60)$ is **Blocked** (Wall).
+3.  **Calculate $\mu$:**
+    * Check pair $(s_5, s_4)$: $s_5$ is Free, $s_4$ is Blocked.
+    * $b(s_5, s_4) = 1$.
+4.  **Result:** $\mu(40, 50) \ge 1$.
+    The tile **$(40, 50)$** is added to list $L$.
 
 ---
 
@@ -416,19 +403,24 @@ The robot doesn't just measure a straight line through walls. It calculates the 
 
 ### Unified Example: Phase 3 (Selection)
 
-![Phase 3 Selection](../outputs/fig_phase3_selection.png)
+**Scenario:** The robot is currently stuck at the **Critical Point $s_{cp} = (50, 50)$**. It consults its Backtracking List $L$, which contains two valid candidates identified during previous exploration.
 
-**Scenario:** The robot is currently stuck at the **Critical Point $s_{cp} = (88, 1)$**. It consults its backtracking list $L$.
+1.  **Candidates in $L$:**
+    * **Candidate A:** Tile at **$(40, 50)$**. (This is just West of the current position).
+    * **Candidate B:** Tile at **$(10, 10)$**. (This was the starting point, far away).
 
-1.  **Candidate count:** $|L| = 32$.
+2.  **Calculate Path Costs ($J$):**
+    * **Path to A:** The planner finds a direct path.
+        $$J((50,50), (40,50)) = 10 \text{ units}.$$
+    * **Path to B:** The planner finds a path traversing back across the whole room.
+        $$J((50,50), (10,10)) \approx 56 \text{ units}.$$
 
-2.  **Planner outputs for the chosen candidate:**
-    * A* path length: $37$ (tile steps).
-    * Smoothed path length: $2$ (waypoints).
+3.  **Selection ($\arg\min$):**
+    The robot compares the costs: $10 < 56$.
 
-3.  **Result:**
-    $$s_{sp} = (52, 1).$$
-
+4.  **Result:**
+    $$s_{sp} = (40, 50).$$
+    The robot selects **$(40, 50)$** as its next destination.
 ---
 
 ## Backtracking path planning
@@ -478,240 +470,278 @@ To execute the path, the robot moves from its current pose $q$ to the center of 
 
 ### Unified Example: Phase 3 (Execution)
 
-![Phase 3 Execution](../outputs/fig_phase3_execution.png)
-
-**Scenario:** The robot is currently at the stuck point $(88, 1)$ and has selected $(52, 1)$ as its next destination.
+**Scenario:** The robot is currently at the stuck point $(50, 50)$ and has selected $(40, 50)$ as its next destination. Since these tiles are adjacent and have a clear line of sight, the path planner outputs the target directly.
 
 1.  **Current State ($q$):**
-    * Position: **$(88, 1)$**
-    * Heading: **$\theta$**
+    * Position: **$(50, 50)$**
+    * Heading: **$\pi/2$** (Facing North, $90^{\circ}$)
 
 2.  **Target Waypoint ($s_{i+1}$):**
-    * Coordinates: **$(52, 1)$**
+    * Coordinates: **$(40, 50)$**
 
 3.  **Compute Control Commands:**
 
     * **Step A: Calculate Heading ($\beta$)**
-        $$\beta = \arctan\left(\frac{1 - 1}{52 - 88}\right) = \arctan\left(\frac{0}{-36}\right).$$
-        The displacement $(-36, 0)$ points West, so:
-        $$\beta = \pi.$$
+        $$\beta = \arctan\left(\frac{50 - 50}{40 - 50}\right) = \arctan\left(\frac{0}{-10}\right)$$
+        In trigonometry, coordinates $(-10, 0)$ correspond to the angle **$\pi$** radians ($180^{\circ}$ or West).
+        $$\beta = \pi$$
 
     * **Step B: Calculate Rotation ($\alpha$)**
-        $$\alpha = \beta - \theta = \pi - \theta.$$
+        $$\alpha = \beta - \theta = \pi - \frac{\pi}{2} = \frac{\pi}{2}$$
+        A positive $\pi/2$ indicates a **Counter-Clockwise (Left)** turn of $90^{\circ}$.
 
     * **Step C: Calculate Distance ($d$)**
-        $$d = \sqrt{(52 - 88)^2 + (1 - 1)^2} = 36.$$
+        $$d = \sqrt{(40 - 50)^2 + (50 - 50)^2} = \sqrt{(-10)^2 + 0} = \sqrt{100} = 10$$
 
 4.  **Execute:**
-    The robot rotates by $\alpha$ and moves forward $d$ units. It arrives at $(52, 1)$, completes the backtracking phase, and is ready to start a new coverage sweep.
+    The robot executes a **Left Turn** ($\pi/2$) and moves forward **10 units**. It arrives at $(40, 50)$, completes the backtracking phase, and is ready to start a new coverage sweep.
 
-## Implementation Details
+# Implementation Details
 
-This section describes how BA* is implemented in the accompanying codebase.
+This section describes how the BA* method is implemented in code, focusing on the tiling model, neighborhood queries, and the execution flow that connects boustrophedon motion (BM) with A* based backtracking.
 
-### Workspace representation and coordinates
+## Data structures
 
-The workspace is a **binary occupancy grid** (`GridMap`) where each state is indexed by an integer cell coordinate:
+### Discovered tiling state $\hat{M}$
 
-* A cell is a tuple $c=(x,y)$ with $0 \le x < \text{width}$ and $0 \le y < \text{height}$.
-* The grid stores occupancy as `occ[y, x]` with:
+We store the discovered map state as a mapping from **discrete tile indices** to a finite tile state:
 
-  * `occ[y, x] = 1` meaning obstacle,
-  * `occ[y, x] = 0` meaning free.
-* The coordinate convention follows array indexing: **$y$ increases downward**.
+$$
+\hat{M}:\mathbb{Z}^2 \to {\text{unknown},\text{covered},\text{obstacle}}.
+$$
 
-A physical scaling factor `tile_size` exists (`GridSpec.tile_size`) and defaults to $1.0$. In the provided implementation, planning and motion are executed in **grid cells** (one step per edge).
+In code, $\hat{M}$ is implemented as a grid or a hash map keyed by integer coordinates, for example `(i, j)`. Tiles not present in the map are treated as `unknown` by default.
 
-### Discovered map state \hat{M} and tile states
+Each tile state is one of:
 
-The discovered state $\hat{M}$ is stored as a sparse dictionary `hatM: Dict[Coord, int]`:
+$$
+{\text{unknown},\text{covered},\text{obstacle}}.
+$$
 
-* Missing key means `STATE_UNKNOWN`.
-* Known states are:
+### Tile indexing and coordinate mapping
 
-  * `STATE_UNKNOWN = 0`
-  * `STATE_COVERED = 1`
-  * `STATE_OBSTACLE = 2`
+The simulator operates in continuous coordinates for the robot pose $q=[x,y,\theta]^T$, but the BA* planner operates on tiles. We define a deterministic function `pose_to_tile(x, y)` that maps the current robot center to a tile index `(i, j)` and its tile center `(x_i, y_j)` based on the tile resolution (tile side length is the robot diameter $2r$).
 
-The implementation maintains two derived sets:
+(To be completed: exact rounding rule and how tile centers are represented.)
 
-* `covered: Set[Coord]` for covered cells.
-* `known_obs: Set[Coord]` for discovered obstacle cells.
+### Covered set and candidate set
 
-A cell becomes covered through `_mark_covered(c)`, which only changes a cell from `UNKNOWN` to `COVERED`. An already known obstacle is not overwritten as covered.
+For efficient membership tests:
 
-### Sensing and obstacle discovery
+* The covered set $C_{\text{cov}}={s:\hat{M}(s)=\text{covered}}$ is maintained implicitly through $\hat{M}$, and optionally also as a dedicated hash set of covered tile keys.
+* The backtracking list $L$ is stored as a set or a de-duplicated list of tile keys, because the same candidate can be detected multiple times during BM.
 
-Obstacle discovery is performed by `_sense()` in `BAStarPlanner`:
+## Neighbor queries and predicates
 
-* The sensing mode is configured by `BAStarConfig.sense_mode`:
+### 4-neighborhood and 8-neighborhood
 
-  * `"N8"` senses current cell plus its 8 neighbors.
-  * `"N4"` senses current cell plus its 4 neighbors.
-  * `"NONE"` disables sensing updates.
-* For each sensed cell $c$, if the ground truth grid has an obstacle at $c$, the planner sets:
-  $$\hat{M}(c) = \text{OBSTACLE}.$$
-* Free cells are not explicitly marked as free; they remain `UNKNOWN` until they become `COVERED`.
+Neighbor sets are computed by fixed integer offsets in tile-index space:
 
-### Blocked and uncovered free predicates
+* $N_4(s)$ uses offsets `[(+1,0), (0,+1), (-1,0), (0,-1)]`.
+* $N_8(s)$ adds the diagonals.
 
-Two predicates drive motion and corner detection:
+This neighbor logic is reused in three places:
 
-* `is_uncovered_free(c)` is true when:
+1. Checking whether BM can proceed.
+2. Detecting critical points.
+3. Computing the corner score $\mu(s)$ for candidate detection.
 
-  * the ground truth cell is free, and
-  * $\hat{M}(c)$ is `UNKNOWN`.
+### Blocked and uncovered predicates
 
-* `is_blocked(c)` is true when any of the following hold:
+The algorithm uses the following predicates derived from $\hat{M}$:
 
-  * $c$ is out of bounds,
-  * the ground truth cell is an obstacle,
-  * $\hat{M}(c)$ is `COVERED` or `OBSTACLE`.
+* `isBlocked(s)` is true if a tile is already covered or is an obstacle.
+* `isUncovered(s)` is true if a tile is still unknown.
 
-This means the simulator treats true obstacles as blocked even if they have not been sensed yet.
+In code, these are implemented as state checks on $\hat{M}[s]`with the convention that a missing key implies`unknown`.
 
-### Boustrophedon motion mode used in code
+## Robot, sensing, and obstacle detection
 
-The BM step is implemented by `_bm_next_cell(s)`:
+### Robot state and motion primitives
 
-* The planner queries 4 neighbors in the fixed order **N, S, E, W** (`neighbors4`).
-* It moves to the **first** neighbor that satisfies `is_uncovered_free(nb)`.
-* If no neighbor is uncovered free, BM stops and the algorithm checks for a critical point.
+The simulator maintains the robot pose:
 
-### Critical point test
+$$
+q=[x,y,\theta]^T,
+$$
 
-A cell $s$ is treated as a critical point by `_is_critical(s)` when all four cardinal neighbors are blocked:
+and supports two primitives:
 
-* Iterate over `neighbors4(s)` (N, S, E, W).
-* If any neighbor is not blocked, return false.
-* Otherwise return true.
+1. Rotate in place by $\alpha$.
+2. Translate forward by distance $d$ along heading $\theta$.
 
-### Candidate list L construction via μ(s)
+Each movement updates the continuous pose and then updates the tile state using `pose_to_tile`.
 
-Candidates are computed by scanning all covered cells:
+### Obstacle detection and map updates
 
-* `build_candidates_L()` iterates over `self.covered` and inserts any cell $s$ with $\mu(s)\ge 1$.
+Obstacle detection is assumed reliable in the simulator. When the robot observes a tile that is occupied, we set:
 
-The corner score is implemented as:
+$$
+\hat{M}(s)=\text{obstacle}.
+$$
 
-* `neighbors8_indexed(s)` returns the ordered neighbor positions:
-  $s_1$ E, $s_2$ NE, $s_3$ N, $s_4$ NW, $s_5$ W, $s_6$ SW, $s_7$ S, $s_8$ SE.
-  Out of bounds positions are still generated and later handled by `is_blocked`.
+Collision checks are performed against the obstacle representation before executing a translation segment.
 
-* The indicator is:
-  $$b(s_i,s_j)=1 \text{ if } s_i \text{ is uncovered free and } s_j \text{ is blocked; else } 0.$$
+(To be completed: exact sensor footprint and when an obstacle tile becomes observable.)
 
-* The implementation computes:
-  $$
-  \mu(s)=b(s_1,s_8)+b(s_1,s_2)+b(s_5,s_6)+b(s_5,s_4)+b(s_7,s_6)+b(s_7,s_8).
-  $$
+## Coverage tracking
 
-### Backtracking graph and A*
+### Marking covered tiles
 
-Backtracking uses A* over a graph induced by the currently covered cells:
+A tile is marked `covered` the first time it is swept by BM. This implements the covered-at-most-once invariant:
 
-* The A* neighbor function is 4 connected: `neighbors4(c)`.
-* A node is passable for A* only if:
+* BM is the only phase that changes a tile from `unknown` to `covered`.
+* Backtracking is allowed to pass through `covered` tiles without changing their state.
 
-  * it is in bounds,
-  * it is not an obstacle in the ground truth,
-  * and it is in `covered`.
+### Visited versus covered in code
 
-Edge cost is uniform: each move has cost $1$.
+To avoid mixing concepts:
 
-The heuristic is Euclidean distance in grid coordinates:
-$$h(a,b)=\sqrt{(b_x-a_x)^2+(b_y-a_y)^2}.$$
+* `covered` is a persistent tile state in $\hat{M}$.
+* `visited` is optional instrumentation (for logging or debugging) that can record how many times a tile is traversed, including during backtracking.
 
-The A* implementation returns:
+## Walkthrough: Unified scenario in code
 
-* `path`: list of cells from start to goal,
-* `cost`: the $g$ cost at the goal,
-* `expanded`: number of popped nodes.
+This subsection illustrates the control flow using a single consistent scenario. In this unified example, we fix:
 
-### Selecting the next starting point s_sp
+* Critical point: $s_{cp}=(50,50)$
+* Selected starting point: $s_{sp}=(40,50)$
 
-`select_start_point(s_cp, L)` supports two modes (`BAStarConfig.prefer_cost`):
+### Phase 1: Boustrophedon motion (BM)
 
-1. `EUCLIDEAN`: pick the candidate minimizing Euclidean distance to $s_{cp}$.
-2. `A_STAR`: for each candidate $s \in L$, run A* from $s_{cp}$ to $s$ on the covered graph and choose the one with minimum returned `cost` among reachable candidates.
+1. The robot starts BM from an initial pose and repeats:
 
-If no candidates exist, or none are reachable by A*, the planner terminates (because `stop_if_no_candidates=True` in `run_unified.py`).
+   * Compute the current tile key $s=\text{pose\_to\_tile}(x,y)$.
+   * If $\hat{M}(s)=\text{unknown}$, mark it as `covered`.
+   * Evaluate possible next moves using $N_4(s)$ and `isBlocked(·)`.
 
-### A*SPT like smoothing and line of sight rule
+2. During BM, we also run candidate detection:
 
-Smoothing is implemented in `astar_spt_smooth(grid, path)`:
+   * For tiles in a local window around the robot (or at minimum the current tile), compute the corner score $\mu(s)$ using neighbor states.
+   * If $\mu(s)\ge 1$ and $s\in M$, insert $s$ into $L`.
 
-* It greedily jumps from the current waypoint to the **farthest** later waypoint that has line of sight, otherwise it falls back to the next waypoint.
-* Line of sight is checked using `grid.line_of_sight(a,b)`:
+### Phase 2: Critical point detection
 
-  * Compute the discrete cell line between $a$ and $b$ using Bresenham.
-  * Return true if every cell on that line is free in the ground truth grid.
+At each BM step, we check whether the current tile is a critical point:
 
-The output is a shorter waypoint list and a count of how many intermediate cells were removed.
+* Compute the four neighbors $N_4(s)$.
+* If all neighbors are blocked, BM stops and we record the current tile as:
 
-### Execution model and trajectory logging
+$$
+s_{cp}=(50,50).
+$$
 
-Execution is discrete:
+### Phase 3: Selecting $s_{sp}$ from $L$
 
-* `_follow_cells(cells)` walks the given cell sequence and appends it to `trajectory`.
-* Each visited cell triggers sensing (`_sense()`).
-* The planner stores `pose` as floats, but position is always set to the current cell coordinates.
-* Path length is computed as:
-  $$\text{path\_length} = (|\text{trajectory}| - 1)\cdot \text{tile\_size}.$$
+Given the candidate set $L$, we select a next starting point.
 
-### Heading adjustment after backtracking
+Implementation options:
 
-After backtracking to $s_{sp}$, `_heading_adjustment(s_sp)` sets a discrete heading in priority order:
+1. Euclidean proxy: compute a simple distance from $s_{cp}$ to each candidate.
+2. Backtracking cost: for each candidate, run A* (and optionally A*SPT) to estimate the true backtracking distance.
 
-1. North $(\pi/2)$ if the north neighbor is uncovered free.
-2. East $(0)$ if the east neighbor is uncovered free.
-3. South $(-\pi/2)$ if the south neighbor is uncovered free.
-4. West $(\pi)$ if the west neighbor is uncovered free.
+In this unified example, the selected result is:
 
-If none are available, heading is unchanged.
+$$
+s_{sp}=(40,50).
+$$
 
-### Obstacle inflation option
+### Phase 4: Backtracking path planning (A* then A*SPT)
 
-If `inflate_obstacles > 0`, the ground truth grid is inflated by a square neighborhood around each obstacle cell (`inflate_obstacles(radius_cells)`), and planning runs on the inflated grid.
+1. Run A* on the tiling graph whose nodes are covered tiles (plus the current tile), edges connect neighbors, and blocked tiles are excluded.
+2. A* returns a discrete tile path:
 
-### Reproducibility and outputs for the unified scenario
+$$
+P=[s_1,s_2,\dots,s_n],
+$$
 
-`run_unified.py` reproduces the unified run and writes:
+with $s_1=s_{cp}$ and $s_n=s_{sp}$.
 
-* `outputs/summary.json` with the run statistics and first backtracking event fields.
+3. Apply A*SPT to reduce unnecessary turns and produce a shorter waypoint list:
 
-### Key Visualizations
+$$
+\hat{P}=[\hat{s}_1,\hat{s}_2,\dots,\hat{s}_k].
+$$
 
-**Figure 1: Ground Truth Map**
+(To be completed: line-of-sight collision checking in A*SPT and the exact smoothing rule.)
 
-![Ground truth map](../outputs/fig01_map.png)
+### Phase 5: Executing the backtracking path
 
-*Ground truth occupancy grid for the unified scenario. Black cells are obstacles (outer boundary walls plus internal walls and a rectangular block); white cells are free space. Axes show tile indices.*
+For each consecutive waypoint center $(x_{i+1},y_{i+1})$, we compute the control commands:
 
-**Figure 2: Overlay Cells**
+$$
+\beta=\arctan!\left(\frac{y_{i+1}-y}{x_{i+1}-x}\right),
+\qquad
+\alpha=\beta-\theta,
+\qquad
+d=\sqrt{(x_{i+1}-x)^2+(y_{i+1}-y)^2}.
+$$
 
-![Overlay cells](../outputs/fig02_overlay_cells.png)
+The robot rotates by $\alpha$ and translates by $d$, repeating until it reaches $s_{sp}$.
 
-*Same map as Figure 1, with the set of cells marked covered during the BA* run overlaid as blue markers. This visualizes which free cells were covered relative to the obstacle layout.*
+### Phase 6: Heading adjustment and BM restart
 
-**Figure 3: Robot Trajectory**
+Once the robot reaches $s_{sp}$, it snaps to a discrete heading to restart BM. We implement the priority order:
 
-![Trajectory and covered cells](../outputs/fig03_full_run.png)
+1. North
+2. East
+3. South
+4. West
 
-*Trajectory of the robot over the unified scenario, drawn as a polyline over the map. The red dot marks the start location (consistent with the unified run start), and the dense vertical sweep pattern illustrates boustrophedon style coverage.*
+Let $\gamma$ be the chosen discrete heading and $\theta$ the current heading. The rotation applied is:
 
-**Figure 4: Candidate Selection**
+$$
+\alpha=\gamma-\theta.
+$$
 
-![Candidate list and selected s_sp](../outputs/fig04_candidates.png)
+After heading adjustment, the robot re-enters Phase 1 (BM) from $s_{sp}$.
 
-*Visualization of the candidate backtracking list $L$ and the chosen starting point $s_{sp}$. Blue markers show covered cells; orange markers show cells in $L$; the green “x” marks the critical point $s_{cp}$, and the red star marks the selected starting point $s_{sp}$ used for the first backtracking event.*
+## Deviations and simplifications relative to the BA* paper
 
-**Figure 5: Path Smoothing**
+(To be completed: list any deviations, simplifications, or implementation-specific assumptions relative to the BA* paper; for example sensing assumptions, movement discretization, or an approximate A*SPT line-of-sight test.)
 
-![A* path vs smoothed path](../outputs/fig05_astar_vs_smooth.png)
+# Experiments and Evaluation
 
-*Comparison of the raw A* backtracking path $P$ and the smoothed waypoint path $\hat{P}$ for the first backtracking event. The plot marks $s_{cp}$ (blue “x”) and $s_{sp}$ (orange star), showing how smoothing reduces the original grid path to a shorter waypoint sequence.*
+## Experimental setup
 
+(To be completed with details.) Intended setup:
+
+* Maps represented as binary occupancy grids or binary images (free vs obstacle).
+* A circular robot model with radius $r$, operating under the motion primitives defined above.
+* Multiple map categories (simple rooms, cluttered environments, narrow passages) to stress both BM and backtracking.
+
+## Metrics
+
+We evaluate BA* using:
+
+1. **Coverage rate:** fraction of reachable free area covered by the robot.
+2. **Path length:** total traveled distance (sum of translations).
+3. **Number of boustrophedon regions:** number of BM sweep segments separated by backtracking events.
+
+## Results
+
+(To be completed with results.)
+
+* Insert plots of coverage over time.
+* Insert path visualizations of trajectories and backtracking paths.
+* Insert summary tables across maps: coverage rate, total path length, number of regions.
+
+# Discussion and Limitations
+
+BA* achieves efficient online coverage by combining a sweeping mode (BM) with deliberate backtracking through A* on a discovered tiling graph. The theory in this report emphasizes:
+
+* The distinction between **covered** and **visited** tiles, and the covered-at-most-once invariant.
+* The role of a **critical point** as a trigger to switch from sweeping to backtracking.
+* The use of A* to return to a promising boundary point, and smoothing (A*SPT) to reduce turn-heavy grid paths.
+
+Limitations highlighted by the theory text include:
+
+* BA* may leave small uncovered portions near obstacle boundaries depending on tiling resolution and boundary handling.
+* Online operation means decisions depend on partial knowledge; early choices can influence backtracking frequency and total path length.
+
+## Complexity (report-safe statement)
+
+A report-safe statement is that each A* backtracking computation runs in time polynomial in the number of discovered tiles, and in practice is dominated by graph search on the current tiling graph. The overall runtime depends on the number of backtracking events and the growth of the discovered tiling model during coverage.
 
 
 # Conclusion
@@ -720,7 +750,6 @@ This report describes BA*, an online complete coverage algorithm that performs b
 
 # References
 
-[1] Hoang Huu Viet, Viet Hung Dang, Md Nasir Uddin Laskar, TaeChoong Chung. *BA*: an online complete coverage algorithm for cleaning robots. *Applied Intelligence*, 39:217 to 235, 2013. DOI: 10.1007/s10489-012-0406-4. 
-
-[2] H. Choset, P. Pignon. Coverage path planning: The boustrophedon cellular decomposition. In *Proceedings of the International Conference on Field and Service Robotics (FSR)*, Canberra, Australia, 1997. 
-
+[1] BA* paper (to be completed).
+[2] BCD paper (to be completed).
+[3] B-Theta* paper (to be completed).

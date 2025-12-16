@@ -32,23 +32,23 @@ def plot_map(grid: GridMap, ax: Optional[plt.Axes] = None, title: Optional[str] 
     return ax
 
 
-def overlay_cells(ax: plt.Axes, cells: Set[Coord], marker_size: float = 6.0, label: Optional[str] = None):
+def overlay_cells(ax: plt.Axes, cells: Set[Coord], marker_size: float = 6.0, label: Optional[str] = None, color: Optional[str] = None, zorder: Optional[int] = None):
     if not cells:
         return
     xs = np.array([c[0] + 0.5 for c in cells], dtype=float)
     ys = np.array([c[1] + 0.5 for c in cells], dtype=float)
-    ax.scatter(xs, ys, s=marker_size, alpha=0.35, label=label)
+    ax.scatter(xs, ys, s=marker_size, alpha=0.35, label=label, color=color, zorder=zorder)
 
 
-def plot_trajectory(ax: plt.Axes, traj: List[Coord], linewidth: float = 1.3, label: Optional[str] = None):
+def plot_trajectory(ax: plt.Axes, traj: List[Coord], linewidth: float = 1.3, label: Optional[str] = None, color: Optional[str] = None):
     if not traj:
         return
     xs, ys = _cell_centers(traj)
-    ax.plot(xs, ys, linewidth=linewidth, label=label)
+    ax.plot(xs, ys, linewidth=linewidth, label=label, color=color)
 
 
-def highlight_point(ax: plt.Axes, c: Coord, marker: str = "o", size: float = 60.0, label: Optional[str] = None):
-    ax.scatter([c[0] + 0.5], [c[1] + 0.5], s=size, marker=marker, label=label)
+def highlight_point(ax: plt.Axes, c: Coord, marker: str = "o", size: float = 60.0, label: Optional[str] = None, color: Optional[str] = None, zorder: Optional[int] = None):
+    ax.scatter([c[0] + 0.5], [c[1] + 0.5], s=size, marker=marker, label=label, color=color, zorder=zorder)
 
 
 def save_fig(path: str):
@@ -82,10 +82,14 @@ def plot_astar_vs_smooth(grid: GridMap, s_cp: Coord, s_sp: Coord, astar_path: Li
     save_fig(out_path)
 
 
-def plot_full_run(grid: GridMap, covered: Set[Coord], traj: List[Coord], out_path: str, title: str = "BA* run"):
+def plot_full_run(grid: GridMap, covered: Set[Coord], traj: List[Coord], out_path: str, title: str = "BA* run", start_point: Optional[Coord] = None):
     fig, ax = plt.subplots(figsize=(7, 7))
     plot_map(grid, ax=ax, title=title)
-    overlay_cells(ax, covered, marker_size=4.0, label="covered")
+    # Draw trajectory first (lower layer)
     plot_trajectory(ax, traj, linewidth=1.2, label="trajectory")
+    # Draw covered cells on top (default matplotlib color, same as fig03)
+    # overlay_cells(ax, covered, marker_size=10.0, label="covered", zorder=10, color="green")
+    if start_point is not None:
+        highlight_point(ax, start_point, marker="o", size=100.0, label="start", color="red", zorder=15)
     ax.legend(loc="lower left", framealpha=0.85)
     save_fig(out_path)

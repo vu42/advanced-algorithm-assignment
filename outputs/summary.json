@@ -1,0 +1,24 @@
+{
+  "scenario": "unified",
+  "start": [
+    12,
+    75
+  ],
+  "steps": 7505,
+  "coverage_rate": 1.0,
+  "path_length": 7505.0,
+  "num_backtrack_events": 10,
+  "first_event": {
+    "s_cp": [
+      88,
+      1
+    ],
+    "s_sp": [
+      52,
+      1
+    ],
+    "num_candidates": 32,
+    "astar_path_len": 37,
+    "smooth_path_len": 2
+  }
+}

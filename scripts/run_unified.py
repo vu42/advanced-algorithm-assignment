@@ -15,7 +15,7 @@ from ba_star import viz
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--outdir", type=str, default="outputs_unified")
+    ap.add_argument("--outdir", type=str, default="outputs")
     ap.add_argument("--max_steps", type=int, default=60000)
     ap.add_argument("--sense", type=str, default="N8", choices=["N8", "N4", "NONE"])
     ap.add_argument("--inflate", type=int, default=0)
@@ -42,13 +42,21 @@ def main() -> int:
     viz.plot_map(scenario.grid, ax=ax, title="Unified scenario map (ground truth)")
     viz.save_fig(str(outdir / "fig01_map.png"))
 
-    # Figure 2: full run
+    # Figure 2: map with overlay cells (covered cells)
+    fig, ax = plt.subplots(figsize=(7, 7))
+    viz.plot_map(scenario.grid, ax=ax, title="Map with covered cells overlay")
+    viz.overlay_cells(ax, res.covered_cells, marker_size=4.0, label="covered")
+    ax.legend(loc="lower left", framealpha=0.85)
+    viz.save_fig(str(outdir / "fig02_overlay_cells.png"))
+
+    # Figure 3: full run  
     viz.plot_full_run(
         scenario.grid,
         covered=res.covered_cells,
         traj=res.trajectory_cells,
-        out_path=str(outdir / "fig02_full_run.png"),
-        title="BA* unified run: covered cells and trajectory",
+        out_path=str(outdir / "fig03_full_run.png"),
+        title="BA* full run: covered cells and trajectory",
+        start_point=scenario.start,
     )
 
     # If we have a backtracking event, visualize the first one
@@ -60,7 +68,7 @@ def main() -> int:
             candidates=ev.candidates,
             s_cp=ev.s_cp,
             s_sp=ev.s_sp,
-            out_path=str(outdir / "fig03_candidates.png"),
+            out_path=str(outdir / "fig04_candidates.png"),
         )
         viz.plot_astar_vs_smooth(
             scenario.grid,
@@ -68,7 +76,7 @@ def main() -> int:
             s_sp=ev.s_sp,
             astar_path=ev.astar_path,
             smooth_path=ev.smooth_path,
-            out_path=str(outdir / "fig04_astar_vs_smooth.png"),
+            out_path=str(outdir / "fig05_astar_vs_smooth.png"),
         )
 
     summary = {
