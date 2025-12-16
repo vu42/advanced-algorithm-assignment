@@ -1,3 +1,4 @@
+
 # Introduction
 
 Online complete coverage requires a robot to cover all accessible free space in a workspace, while avoiding obstacles. In the online setting, the robot does not have a complete prior map and must instead build knowledge during motion.
@@ -56,21 +57,21 @@ Run summary (from `summary.json`):
 
 BA* targets online complete coverage in an unknown closed workspace. The robot is assumed to move in planar space with configuration:
 $$
-q = [x, y, \theta]^T,
+q = [x, y, \theta]^T
 $$
+
 where $(x,y)\in\mathbb{R}^2$ is the robot center position in the plane and $\theta$ is the heading angle. The robot is modeled as a circle with radius $r$, and the free configuration space is denoted $C_{\text{free}}$.
 
 Motion primitives used in the report are:
 
-* **Forward translation** of distance $d$ at heading $\theta$:
+* Forward translation of distance $d$ at heading $\theta$:
     $$
     q'=
     \begin{bmatrix}
     x' \\
     y' \\
     \theta'
-    \end{bmatrix}
-    =
+    \end{bmatrix} =
     \begin{bmatrix}
     x \\
     y \\
@@ -85,14 +86,14 @@ Motion primitives used in the report are:
     $$
 
 * **In-place rotation** by angle $\alpha$:
+    
     $$
     q'=
     \begin{bmatrix}
     x' \\
     y' \\
     \theta'
-    \end{bmatrix}
-    =
+    \end{bmatrix} =
     \begin{bmatrix}
     x \\
     y \\
@@ -120,23 +121,23 @@ BA* uses a discrete heading set aligned with the four cardinal directions. In th
 **Scenario:** Our robot starts at $(12,75)$ facing East. It rotates North and moves forward one step.
 
 1.  **Initial State:**
+    
     $$q_{\text{start}}=\begin{bmatrix}12 \\ 75 \\ 0\end{bmatrix}.$$
 
 2.  **Rotation:** Rotate to face North ($\alpha=\pi/2$).
+    
     $$
     q_{\text{rotated}}=
     \begin{bmatrix}
     12 \\
     75 \\
     0
-    \end{bmatrix}
-    +
+    \end{bmatrix} +
     \begin{bmatrix}
     0 \\
     0 \\
     \pi/2
-    \end{bmatrix}
-    =
+    \end{bmatrix} =
     \begin{bmatrix}
     12 \\
     75 \\
@@ -145,20 +146,19 @@ BA* uses a discrete heading set aligned with the four cardinal directions. In th
     $$
 
 3.  **Translation:** Move forward by radius distance $d=5$.
+    
     $$
     q_{\text{final}}=
     \begin{bmatrix}
     12 \\
     75 \\
     \pi/2
-    \end{bmatrix}
-    +
+    \end{bmatrix} +
     \begin{bmatrix}
     5\cos(\pi/2) \\
     5\sin(\pi/2) \\
     0
-    \end{bmatrix}
-    =
+    \end{bmatrix} =
     \begin{bmatrix}
     12 \\
     80 \\
