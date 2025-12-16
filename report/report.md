@@ -197,9 +197,11 @@ In the BA* algorithm, the robot's environment is divided into "valid" and "inval
 
 The mathematical definition is:
 
-$$
+```math
 C_{\text{free}} = \left\{ q\in C \;\middle|\; A(q)\cap\left(\bigcup_i O_i\right)=\varnothing \right\}
-$$
+```
+
+
 
 Where:
 * **$q$ (Configuration):** The specific state of the robot at a single moment (defined earlier as $[x, y, \theta]^T$).
@@ -325,6 +327,7 @@ $$
 
 ### Boundary indicator $b$
 We define a function to detect "free-to-blocked" edges:
+
 $$
 b(s_i,s_j)=
 \begin{cases}
@@ -466,17 +469,17 @@ BA* first plans a collision-free path on the tiling graph from the critical poin
 To execute the path, the robot moves from its current pose $q$ to the center of the next waypoint tile $s_{i+1}$. The control commands are computed using three formulas:
 
 * **Heading ($\beta$):**
-    $$
-    \beta=\arctan\frac{y_{i+1}-y}{x_{i+1}-x}
-    $$
+$$
+\beta=\arctan\frac{y_{i+1}-y}{x_{i+1}-x}
+$$
 * **Rotation ($\alpha$):**
-    $$
-    \alpha=\beta-\theta
-    $$
+$$
+\alpha=\beta-\theta
+$$
 * **Distance ($d$):**
-    $$
-    d=\sqrt{(x_{i+1}-x)^2+(y_{i+1}-y)^2}
-    $$
+$$
+d=\sqrt{(x_{i+1}-x)^2+(y_{i+1}-y)^2}
+$$
 
 #### Explanation of parameters
 
@@ -676,7 +679,10 @@ Execution is discrete:
 * Each visited cell triggers sensing (`_sense()`).
 * The planner stores `pose` as floats, but position is always set to the current cell coordinates.
 * Path length is computed as:
-  $$\text{path\_length} = (|\text{trajectory}| - 1)\cdot \text{tile\_size}.$$
+
+$$
+\text{path\\_length} = (|\text{trajectory}| - 1)\cdot \text{tile\\_size}.
+$$
 
 ### Heading adjustment after backtracking
 
