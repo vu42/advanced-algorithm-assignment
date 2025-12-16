@@ -56,6 +56,7 @@ Run summary (from `summary.json`):
 ## Workspace and robot model
 
 BA* targets online complete coverage in an unknown closed workspace. The robot is assumed to move in planar space with configuration:
+
 $$
 q = [x, y, \theta]^T
 $$
@@ -65,47 +66,48 @@ where $(x,y)\in\mathbb{R}^2$ is the robot center position in the plane and $\the
 Motion primitives used in the report are:
 
 * Forward translation of distance $d$ at heading $\theta$:
-    $$
-    q'=
-    \begin{bmatrix}
-    x' \\
-    y' \\
-    \theta'
-    \end{bmatrix} =
-    \begin{bmatrix}
-    x \\
-    y \\
-    \theta
-    \end{bmatrix}
-    +
-    \begin{bmatrix}
-    d\cos\theta \\
-    d\sin\theta \\
-    0
-    \end{bmatrix}.
-    $$
+
+$$
+q'=
+\begin{bmatrix}
+x' \\
+y' \\
+\theta'
+\end{bmatrix} =
+\begin{bmatrix}
+x \\
+y \\
+\theta
+\end{bmatrix}
++
+\begin{bmatrix}
+d\cos\theta \\
+d\sin\theta \\
+0
+\end{bmatrix}.
+$$
 
 * **In-place rotation** by angle $\alpha$:
     
-    $$
-    q'=
-    \begin{bmatrix}
-    x' \\
-    y' \\
-    \theta'
-    \end{bmatrix} =
-    \begin{bmatrix}
-    x \\
-    y \\
-    \theta
-    \end{bmatrix}
-    +
-    \begin{bmatrix}
-    0 \\
-    0 \\
-    \alpha
-    \end{bmatrix}.
-    $$
+$$
+q'=
+\begin{bmatrix}
+x' \\
+y' \\
+\theta'
+\end{bmatrix} =
+\begin{bmatrix}
+x \\
+y \\
+\theta
+\end{bmatrix}
++
+\begin{bmatrix}
+0 \\
+0 \\
+\alpha
+\end{bmatrix}.
+$$
 
 BA* uses a discrete heading set aligned with the four cardinal directions. In this report, we follow the convention (as stated in the draft) that $0$ points East and:
 
@@ -122,49 +124,49 @@ BA* uses a discrete heading set aligned with the four cardinal directions. In th
 
 1.  **Initial State:**
     
-    $$q_{\text{start}}=\begin{bmatrix}12 \\ 75 \\ 0\end{bmatrix}.$$
+$$q_{\text{start}}=\begin{bmatrix}12 \\ 75 \\ 0\end{bmatrix}.$$
 
 2.  **Rotation:** Rotate to face North ($\alpha=\pi/2$).
-    
-    $$
-    q_{\text{rotated}}=
-    \begin{bmatrix}
-    12 \\
-    75 \\
-    0
-    \end{bmatrix} +
-    \begin{bmatrix}
-    0 \\
-    0 \\
-    \pi/2
-    \end{bmatrix} =
-    \begin{bmatrix}
-    12 \\
-    75 \\
-    \pi/2
-    \end{bmatrix}.
-    $$
+
+$$
+q_{\text{rotated}}=
+\begin{bmatrix}
+12 \\
+75 \\
+0
+\end{bmatrix} +
+\begin{bmatrix}
+0 \\
+0 \\
+\pi/2
+\end{bmatrix} =
+\begin{bmatrix}
+12 \\
+75 \\
+\pi/2
+\end{bmatrix}.
+$$
 
 3.  **Translation:** Move forward by radius distance $d=5$.
     
-    $$
-    q_{\text{final}}=
-    \begin{bmatrix}
-    12 \\
-    75 \\
-    \pi/2
-    \end{bmatrix} +
-    \begin{bmatrix}
-    5\cos(\pi/2) \\
-    5\sin(\pi/2) \\
-    0
-    \end{bmatrix} =
-    \begin{bmatrix}
-    12 \\
-    80 \\
-    \pi/2
-    \end{bmatrix}.
-    $$
+$$
+q_{\text{final}}=
+\begin{bmatrix}
+12 \\
+75 \\
+\pi/2
+\end{bmatrix} +
+\begin{bmatrix}
+5\cos(\pi/2) \\
+5\sin(\pi/2) \\
+0
+\end{bmatrix} =
+\begin{bmatrix}
+12 \\
+80 \\
+\pi/2
+\end{bmatrix}.
+$$
 
 ## Discrete tiling model $M$
 
@@ -181,6 +183,7 @@ where the parameters are defined as follows:
 * **Area:** Consequently, the area covered by a single tile is the square of the diameter, $4r^2$. The tile physically represents the square bounding box that fully contains the circular robot at that position.
 
 The paper defines the tiling model as a set of tiles generated in free space:
+
 $$
 M = \{s \mid s \in C_{\text{free}}\}
 $$
