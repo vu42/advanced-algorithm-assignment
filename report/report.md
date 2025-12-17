@@ -393,6 +393,7 @@ $$
 ## Selection of the next starting point
 
 When BA* reaches a critical point $s_{cp}$, it selects a next starting point $s_{sp}\in L$ that minimizes a cost criterion. The report uses a high-level selection:
+
 $$
 s_{sp}=\arg\min_{s\in L} f(s,s_{cp}).
 $$
@@ -626,12 +627,14 @@ The corner score is implemented as:
   Out of bounds positions are still generated and later handled by `is_blocked`.
 
 * The indicator is:
-  $$b(s_i,s_j)=1 \text{ if } s_i \text{ is uncovered free and } s_j \text{ is blocked; else } 0.$$
+
+$$b(s_i,s_j)=1 \text{ if } s_i \text{ is uncovered free and } s_j \text{ is blocked; else } 0.$$
 
 * The implementation computes:
-  $$
-  \mu(s)=b(s_1,s_8)+b(s_1,s_2)+b(s_5,s_6)+b(s_5,s_4)+b(s_7,s_6)+b(s_7,s_8).
-  $$
+
+$$
+\mu(s)=b(s_1,s_8)+b(s_1,s_2)+b(s_5,s_6)+b(s_5,s_4)+b(s_7,s_6)+b(s_7,s_8).
+$$
 
 ### Backtracking graph and A*
 
