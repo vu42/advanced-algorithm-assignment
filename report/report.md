@@ -469,14 +469,19 @@ BA* first plans a collision-free path on the tiling graph from the critical poin
 To execute the path, the robot moves from its current pose $q$ to the center of the next waypoint tile $s_{i+1}$. The control commands are computed using three formulas:
 
 * **Heading ($\beta$):**
+
 $$
 \beta=\arctan\frac{y_{i+1}-y}{x_{i+1}-x}
 $$
+
 * **Rotation ($\alpha$):**
+
 $$
 \alpha=\beta-\theta
 $$
+
 * **Distance ($d$):**
+
 $$
 d=\sqrt{(x_{i+1}-x)^2+(y_{i+1}-y)^2}
 $$
