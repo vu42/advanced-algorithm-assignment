@@ -84,7 +84,7 @@ y \\
 d\cos\theta \\
 d\sin\theta \\
 0
-\end{bmatrix}.
+\end{bmatrix}
 $$
 
 * **In-place rotation** by angle $\alpha$:
@@ -106,7 +106,7 @@ y \\
 0 \\
 0 \\
 \alpha
-\end{bmatrix}.
+\end{bmatrix}
 $$
 
 BA* uses a discrete heading set aligned with the four cardinal directions. In this report, we follow the convention (as stated in the draft) that $0$ points East and:
@@ -227,13 +227,13 @@ $$
 \begin{aligned}
 C_{\text{cov}} &= \{ s: \hat{M}(s)=\text{covered} \}, \\
 C_{\text{obs}} &= \{ s: \hat{M}(s)=\text{obstacle} \}, \\
-C_{\text{unk}} &= \{ s: \hat{M}(s)=\text{unknown} \}.
+C_{\text{unk}} &= \{ s: \hat{M}(s)=\text{unknown} \}
 \end{aligned}
 $$
 
 In this report, the “current tiling model” used by BA* for planning is the covered set:
 $$
-M \equiv C_{\text{cov}}.
+M \equiv C_{\text{cov}}
 $$
 
 We use the convention from the draft that a blocked position is "either an obstacle or a covered tile":
@@ -255,14 +255,14 @@ The key invariant emphasized in this report is:
 **Scenario:** Continuing from Phase 1, the robot creates tiles as it moves.
 
 1.  **Tile 1:** When at $(12, 75)$, it stamped:
-    $$s_1 = (12, 75, 10).$$
+    $$s_1 = (12, 75, 10)$$
     *(Center 12,75; Size 10)*
 
 2.  **Tile 2:** After moving to $(12, 80)$, it stamps:
-    $$s_2 = (12, 80, 10).$$
+    $$s_2 = (12, 80, 10)$$
 
 3.  **Update Map:**
-    $$M = \{ (12, 75, 10), (12, 80, 10) \}.$$
+    $$M = \{ (12, 75, 10), (12, 80, 10) \}$$
     The map $M$ now contains these two discrete squares.
 
 ## Boustrophedon motion as coverage mode
@@ -359,7 +359,7 @@ Where:
 The draft defines a corner score $\mu(s)$ by summing boundary indicators on selected neighbor pairs:
 
 $$
-\mu(s)=b(s_1,s_8)+b(s_1,s_2)+b(s_5,s_6)+b(s_5,s_4)+b(s_7,s_6)+b(s_7,s_8).
+\mu(s)=b(s_1,s_8)+b(s_1,s_2)+b(s_5,s_6)+b(s_5,s_4)+b(s_7,s_6)+b(s_7,s_8)
 $$
 
 Where:
@@ -373,7 +373,7 @@ Where:
 A tile is added to the backtracking list when it is a “corner-like” boundary point:
 
 $$
-L=\{ s \mid s\in M \text{ and } \mu(s)\ge 1 \}.
+L=\{ s \mid s\in M \text{ and } \mu(s)\ge 1 \}
 $$
 
 ### Unified Example: Phase 4 (List Check)
@@ -395,7 +395,7 @@ $$
 When BA* reaches a critical point $s_{cp}$, it selects a next starting point $s_{sp}\in L$ that minimizes a cost criterion. The report uses a high-level selection:
 
 $$
-s_{sp}=\arg\min_{s\in L} f(s,s_{cp}).
+s_{sp}=\arg\min_{s\in L} f(s,s_{cp})
 $$
 
 Where:
@@ -420,7 +420,7 @@ J(s_{cp},s)=\text{len}\big(\hat{P}(s_{cp}\to s)\big),
 $$
 
 $$
-s_{sp}=\arg\min_{s\in L} J(s_{cp},s).
+s_{sp}=\arg\min_{s\in L} J(s_{cp},s)
 $$
 
 Where:
@@ -539,7 +539,7 @@ $$
 2. Perform one boustrophedon motion (BM) to cover the current region; stop BM when the robot reaches a critical point $s_{cp}$. 
 3. At $s_{cp}$, construct the backtracking list
    $$
-   L={, s \mid s\in M \ \text{and}\ \mu(s)\ge 1 ,}.
+   L={, s \mid s\in M \ \text{and}\ \mu(s)\ge 1 ,}
    $$
 
 4. If $L=\varnothing$, terminate (complete coverage ends). 
@@ -598,7 +598,7 @@ Obstacle discovery is performed by `_sense()` in `BAStarPlanner`:
   * `"N4"` senses current cell plus its 4 neighbors.
   * `"NONE"` disables sensing updates.
 * For each sensed cell $c$, if the ground truth grid has an obstacle at $c$, the planner sets:
-  $$\hat{M}(c) = \text{OBSTACLE}.$$
+  $$\hat{M}(c) = \text{OBSTACLE}$$
 * Free cells are not explicitly marked as free; they remain `UNKNOWN` until they become `COVERED`.
 
 ### Blocked and uncovered free predicates
@@ -670,7 +670,7 @@ Backtracking uses A* over a graph induced by the currently covered cells:
 Edge cost is uniform: each move has cost $1$.
 
 The heuristic is Euclidean distance in grid coordinates:
-$$h(a,b)=\sqrt{(b_x-a_x)^2+(b_y-a_y)^2}.$$
+$$h(a,b)=\sqrt{(b_x-a_x)^2+(b_y-a_y)^2}$$
 
 The A* implementation returns:
 
