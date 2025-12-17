@@ -73,9 +73,9 @@ def plot_astar_vs_smooth(grid: GridMap, s_cp: Coord, s_sp: Coord, astar_path: Li
     fig, ax = plt.subplots(figsize=(7, 7))
     plot_map(grid, ax=ax, title="Backtracking path: A* vs A*SPT smoothing")
     if astar_path:
-        plot_trajectory(ax, astar_path, linewidth=2.0, label="A* path P")
+        plot_trajectory(ax, astar_path, linewidth=2.6, label="A* path P")
     if smooth_path:
-        plot_trajectory(ax, smooth_path, linewidth=2.6, label="smoothed path P_hat")
+        plot_trajectory(ax, smooth_path, linewidth=2.6, label="smoothed path P_hat", color="orange")
     highlight_point(ax, s_cp, marker="x", size=90.0, label="s_cp")
     highlight_point(ax, s_sp, marker="*", size=120.0, label="s_sp")
     ax.legend(loc="lower left", framealpha=0.85)

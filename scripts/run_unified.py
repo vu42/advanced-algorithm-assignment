@@ -20,6 +20,7 @@ def main() -> int:
     ap.add_argument("--sense", type=str, default="N8", choices=["N8", "N4", "NONE"])
     ap.add_argument("--inflate", type=int, default=0)
     ap.add_argument("--prefer_cost", type=str, default="A_STAR", choices=["A_STAR", "EUCLIDEAN"])
+    ap.add_argument("--event_idx", type=int, default=6, help="Index of backtrack event to visualize (default: 6)")
     args = ap.parse_args()
 
     outdir = Path(args.outdir)
@@ -59,9 +60,11 @@ def main() -> int:
         start_point=scenario.start,
     )
 
-    # If we have a backtracking event, visualize the first one
+    # If we have a backtracking event, visualize the selected one
+    event_idx = min(args.event_idx, len(res.events) - 1) if res.events else 0
     if res.events:
-        ev = res.events[0]
+        ev = res.events[event_idx]
+        print(f"Visualizing event {event_idx}: s_cp={ev.s_cp}, s_sp={ev.s_sp}, astar_len={len(ev.astar_path)}, smooth_len={len(ev.smooth_path)}")
         viz.plot_candidates(
             scenario.grid,
             covered=res.covered_cells,
