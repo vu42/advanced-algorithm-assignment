@@ -124,7 +124,7 @@ BA* uses a discrete heading set aligned with the four cardinal directions. In th
 
 1.  **Initial State:**
     
-$$q_{\text{start}}=\begin{bmatrix}12 \\ 75 \\ 0\end{bmatrix}.$$
+$$q_{\text{start}}=\begin{bmatrix}12 \\ 75 \\ 0\end{bmatrix}$$
 
 2.  **Rotation:** Rotate to face North ($\alpha=\pi/2$).
 
@@ -144,7 +144,7 @@ q_{\text{rotated}}=
 12 \\
 75 \\
 \pi/2
-\end{bmatrix}.
+\end{bmatrix}
 $$
 
 3.  **Translation:** Move forward by radius distance $d=5$.
@@ -165,7 +165,7 @@ q_{\text{final}}=
 12 \\
 80 \\
 \pi/2
-\end{bmatrix}.
+\end{bmatrix}
 $$
 
 ## Discrete tiling model $M$
@@ -241,7 +241,7 @@ We use the convention from the draft that a blocked position is "either an obsta
 $$
 \begin{aligned}
 \text{isBlocked}(s) &\iff \hat{M}(s)\in \{ \text{covered}, \text{obstacle} \}, \\
-\text{isUncovered}(s) &\iff \hat{M}(s)=\text{unknown}.
+\text{isUncovered}(s) &\iff \hat{M}(s)=\text{unknown}
 \end{aligned}
 $$
 
@@ -278,7 +278,7 @@ The coverage process continues until BM can no longer extend the sweep without h
 A tile $s$ is treated as a **critical point** when it is locally enclosed by blocked tiles in the 4-neighborhood. The formal definition is:
 
 $$
-s \text{ is critical } \iff \forall s'\in N_4(s),\ \text{isBlocked}(s').
+s \text{ is critical } \iff \forall s'\in N_4(s),\ \text{isBlocked}(s')
 $$
 
 Where:
@@ -301,7 +301,7 @@ Where:
     The algorithm checks the four cardinal neighbors in $N_4(s)$. If all 4 neighbors are blocked, then $s$ is a critical point.
 
 3.  **Result:** Since this run reports a critical point at $(88, 1)$, we treat:
-    $$\text{isCritical}(88, 1) = \text{True}.$$
+    $$\text{isCritical}(88, 1) = \text{True}$$
     The robot declares a **Critical Point** and stops sweeping.
 
 ---
@@ -319,7 +319,7 @@ corresponding to **east, north-east, north, north-west, west, south-west, south,
 
 The 4-neighborhood is:
 $$
-N_8(s)=N(s),\qquad N_4(s)=\{s_1,s_3,s_5,s_7\}.
+N_8(s)=N(s),\qquad N_4(s)=\{s_1,s_3,s_5,s_7\}
 $$
 
 * **$s$:** The central tile currently being analyzed.
@@ -341,7 +341,7 @@ Using $\hat{M}$, one concrete realization used in the draft is:
 $$
 \begin{aligned}
 s_i \text{ is free } &\iff \hat{M}(s_i)=\text{unknown}, \\
-s_j \text{ is blocked } &\iff \hat{M}(s_j)\in \{ \text{covered}, \text{obstacle} \}.
+s_j \text{ is blocked } &\iff \hat{M}(s_j)\in \{ \text{covered}, \text{obstacle} \}
 \end{aligned}
 $$
 
