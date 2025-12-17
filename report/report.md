@@ -719,31 +719,31 @@ If `inflate_obstacles > 0`, the ground truth grid is inflated by a square neighb
 
 ![Ground truth map](../outputs/fig01_map.png)
 
-*Ground truth occupancy grid for the unified scenario. Black cells are obstacles (outer boundary walls plus internal walls and a rectangular block); white cells are free space. Axes show tile indices.*
+Ground truth occupancy grid for the unified scenario. Black cells are obstacles (outer boundary walls plus internal walls and a rectangular block); white cells are free space. Axes show tile indices.
 
 **Figure 2: Overlay Cells**
 
 ![Overlay cells](../outputs/fig02_overlay_cells.png)
 
-*Same map as Figure 1, with the set of cells marked covered during the BA* run overlaid as blue markers. This visualizes which free cells were covered relative to the obstacle layout.*
+Same map as Figure 1, with the set of cells marked covered during the BA* run overlaid as blue markers. This visualizes which free cells were covered relative to the obstacle layout.
 
 **Figure 3: Robot Trajectory**
 
 ![Trajectory and covered cells](../outputs/fig03_full_run.png)
 
-*Trajectory of the robot over the unified scenario, drawn as a polyline over the map. The red dot marks the start location (consistent with the unified run start), and the dense vertical sweep pattern illustrates boustrophedon style coverage.*
+Trajectory of the robot over the unified scenario, drawn as a polyline over the map. The red dot marks the start location (consistent with the unified run start), and the dense vertical sweep pattern illustrates boustrophedon style coverage.
 
 **Figure 4: Candidate Selection**
 
 ![Candidate list and selected s_sp](../outputs/fig04_candidates.png)
 
-*Visualization of the candidate backtracking list $L$ and the chosen starting point $s_{sp}$. Blue markers show covered cells; orange markers show cells in $L$; the green “x” marks the critical point $s_{cp}$, and the red star marks the selected starting point $s_{sp}$ used for the first backtracking event.*
+Visualization of the candidate backtracking list $L$ and the chosen starting point $s_{sp}$. Blue markers show covered cells; orange markers show cells in $L$; the green “x” marks the critical point $s_{cp}$, and the red star marks the selected starting point $s_{sp}$ used for the first backtracking event.
 
 **Figure 5: Path Smoothing**
 
 ![A* path vs smoothed path](../outputs/fig05_astar_vs_smooth.png)
 
-*Comparison of the raw A* backtracking path $P$ and the smoothed waypoint path $\hat{P}$ for the first backtracking event. The plot marks $s_{cp}$ (blue “x”) and $s_{sp}$ (orange star), showing how smoothing reduces the original grid path to a shorter waypoint sequence.*
+Comparison of the raw A* backtracking path $P$ and the smoothed waypoint path $\hat{P}$ for the first backtracking event. The plot marks $s_{cp}$ (blue “x”) and $s_{sp}$ (orange star), showing how smoothing reduces the original grid path to a shorter waypoint sequence.
 
 
 
