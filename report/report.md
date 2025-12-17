@@ -708,9 +708,9 @@ Execution is discrete:
 * The planner stores `pose` as floats, but position is always set to the current cell coordinates.
 * Path length is computed as:
 
-$$
+```math
 \text{path\_length} = (|\text{trajectory}| - 1)\cdot \text{tile\_size}
-$$
+```
 
 ### Heading adjustment after backtracking
 
