@@ -248,9 +248,9 @@ $$
 The key invariant emphasized in this report is:
 * **Covered at most once:** a tile becomes covered when first swept by boustrophedon motion and is never “uncovered” again.
 
-### Unified Example: Phase 1 (Tiling)
+### Unified Example: Phase 2 (Tiling)
 
-![Phase 1 Tiling](../outputs/fig_phase1_tiling.png)
+![Phase 2 Tiling](../outputs/fig_phase2_tiling.png)
 
 **Scenario:** Continuing from Phase 1, the robot creates tiles as it moves.
 
@@ -289,9 +289,9 @@ Where:
 
 > **Semantic translation:** "Tile $s$ is critical **if and only if** **all** four neighbors are **blocked**."
 
-### Unified Example: Phase 2 (Stuck)
+### Unified Example: Phase 3 (Stuck)
 
-![Phase 2 Stuck](../outputs/fig_phase2_stuck.png)
+![Phase 3 Stuck](../outputs/fig_phase3_stuck.png)
 
 **Scenario:** Time has passed. The robot is now at **$(88, 1)$**. It needs to check if it is stuck.
 
@@ -376,9 +376,9 @@ $$
 L=\{ s \mid s\in M \text{ and } \mu(s)\ge 1 \}.
 $$
 
-### Unified Example: Phase 2 (List Check)
+### Unified Example: Phase 4 (List Check)
 
-![Phase 2 List Check](../outputs/fig_phase2_list_check.png)
+![Phase 4 List Check](../outputs/fig_phase4_list_check.png)
 
 **Scenario:** The robot is stuck at $(88, 1)$, so it checks its accumulated knowledge to form backtracking candidates. In the run summary, the selected starting point is $(52, 1)$.
 
@@ -437,9 +437,9 @@ The robot doesn't just measure a straight line through walls. It calculates the 
 
 ---
 
-### Unified Example: Phase 3 (Selection)
+### Unified Example: Phase 5 (Selection)
 
-![Phase 3 Selection](../outputs/fig_phase3_selection.png)
+![Phase 5 Selection](../outputs/fig_phase5_selection.png)
 
 **Scenario:** The robot is currently stuck at the **Critical Point $s_{cp} = (88, 1)$**. It consults its backtracking list $L$.
 
@@ -504,9 +504,9 @@ $$
 
 ---
 
-### Unified Example: Phase 3 (Execution)
+### Unified Example: Phase 6 (Execution)
 
-![Phase 3 Execution](../outputs/fig_phase3_execution.png)
+![Phase 6 Execution](../outputs/fig_phase6_execution.png)
 
 **Scenario:** The robot is currently at the stuck point $(88, 1)$ and has selected $(52, 1)$ as its next destination.
 
@@ -709,7 +709,7 @@ Execution is discrete:
 * Path length is computed as:
 
 $$
-\text{path\\_length} = (|\text{trajectory}| - 1)\cdot \text{tile\\_size}.
+\text{path\_length} = (|\text{trajectory}| - 1)\cdot \text{tile\_size}
 $$
 
 ### Heading adjustment after backtracking

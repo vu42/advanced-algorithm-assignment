@@ -4,10 +4,11 @@ Generate diagrams for Unified Examples in test2.md.
 
 Each diagram illustrates a specific phase of the BA* robot planner:
 1. Phase 1 (Movement) - Rotation and translation
-2. Phase 1 (Tiling) - Tile stamping 
-3. Phase 2 (Stuck) - Critical point detection
-4. Phase 2 (List Check) - Backtracking candidate eligibility
-5. Phase 3 (Selection + Execution) - Path planning and execution
+2. Phase 2 (Tiling) - Tile stamping 
+3. Phase 3 (Stuck) - Critical point detection
+4. Phase 4 (List Check) - Backtracking candidate eligibility
+5. Phase 5 (Selection) - Candidate selection
+6. Phase 6 (Execution) - Path planning and execution
 """
 
 from __future__ import annotations
@@ -121,9 +122,9 @@ def fig_phase1_movement():
 
 
 # =============================================================================
-# DIAGRAM 2: Phase 1 (Tiling) - Creating tiles as robot moves
+# DIAGRAM 2: Phase 2 (Tiling) - Creating tiles as robot moves
 # =============================================================================
-def fig_phase1_tiling():
+def fig_phase2_tiling():
     """Show tiles stamped at (12,75) and (12,80)."""
     fig, ax = setup_figure(figsize=(10, 8))
     
@@ -150,7 +151,7 @@ def fig_phase1_tiling():
     # Draw robot at final position
     draw_robot(ax, 12, 80, theta=np.pi/2, color='#27ae60', alpha=0.7)
     
-    ax.set_title('Phase 1 (Tiling)\nTiles stamped as robot moves', fontsize=14, fontweight='bold')
+    ax.set_title('Phase 2 (Tiling)\nTiles stamped as robot moves', fontsize=14, fontweight='bold')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.legend(loc='upper right', framealpha=0.9)
@@ -163,13 +164,13 @@ def fig_phase1_tiling():
     ax.text(0.02, 0.98, textstr, transform=ax.transAxes, fontsize=10,
             verticalalignment='top', bbox=props)
     
-    save_figure(fig, 'fig_phase1_tiling')
+    save_figure(fig, 'fig_phase2_tiling')
 
 
 # =============================================================================
-# DIAGRAM 3: Phase 2 (Stuck) - Critical point detection
+# DIAGRAM 3: Phase 3 (Stuck) - Critical point detection
 # =============================================================================
-def fig_phase2_stuck():
+def fig_phase3_stuck():
     """Robot at critical point (88,1) with blocked neighbors."""
     fig, ax = setup_figure(figsize=(10, 8))
     
@@ -203,7 +204,7 @@ def fig_phase2_stuck():
                                    alpha=0.6, label='Blocked neighbors N₄(s)')
     ax.add_patch(patches.Rectangle((0, 0), 0, 0, visible=False))
     
-    ax.set_title('Phase 2 (Stuck)\nCritical Point Detection', fontsize=14, fontweight='bold')
+    ax.set_title('Phase 3 (Stuck)\nCritical Point Detection', fontsize=14, fontweight='bold')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.legend(handles=[blocked_patch] + ax.get_legend_handles_labels()[0], 
@@ -218,13 +219,13 @@ def fig_phase2_stuck():
     ax.text(0.02, 0.98, textstr, transform=ax.transAxes, fontsize=10,
             verticalalignment='top', bbox=props)
     
-    save_figure(fig, 'fig_phase2_stuck')
+    save_figure(fig, 'fig_phase3_stuck')
 
 
 # =============================================================================
-# DIAGRAM 4: Phase 2 (List Check) - Backtracking candidate eligibility
+# DIAGRAM 4: Phase 4 (List Check) - Backtracking candidate eligibility
 # =============================================================================
-def fig_phase2_list_check():
+def fig_phase4_list_check():
     """Show tile (52,1) as a backtracking candidate."""
     fig, ax = setup_figure(figsize=(10, 8))
     
@@ -257,7 +258,7 @@ def fig_phase2_list_check():
     # Mark center
     ax.plot(52, 1, 'g*', markersize=15, label='s = (52, 1)')
     
-    ax.set_title('Phase 2 (List Check)\nBacktracking Candidate Eligibility', fontsize=14, fontweight='bold')
+    ax.set_title('Phase 4 (List Check)\nBacktracking Candidate Eligibility', fontsize=14, fontweight='bold')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.legend(loc='upper right', framealpha=0.9)
@@ -273,13 +274,13 @@ def fig_phase2_list_check():
     ax.text(0.02, 0.98, textstr, transform=ax.transAxes, fontsize=10,
             verticalalignment='top', bbox=props)
     
-    save_figure(fig, 'fig_phase2_list_check')
+    save_figure(fig, 'fig_phase4_list_check')
 
 
 # =============================================================================
-# DIAGRAM 5: Phase 3 (Selection) - Candidate selection
+# DIAGRAM 5: Phase 5 (Selection) - Candidate selection
 # =============================================================================
-def fig_phase3_selection():
+def fig_phase5_selection():
     """Show candidate list L and selection of s_sp from s_cp."""
     fig, ax = setup_figure(figsize=(12, 8))
     
@@ -324,7 +325,7 @@ def fig_phase3_selection():
     ax.annotate('min cost path', xy=(70, 6), fontsize=10, color='#9b59b6', 
                 fontweight='bold', ha='center')
     
-    ax.set_title('Phase 3 (Selection)\nChoosing Next Starting Point from Candidates', fontsize=14, fontweight='bold')
+    ax.set_title('Phase 5 (Selection)\nChoosing Next Starting Point from Candidates', fontsize=14, fontweight='bold')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     
@@ -345,13 +346,13 @@ def fig_phase3_selection():
     ax.text(0.02, 0.98, textstr, transform=ax.transAxes, fontsize=9,
             verticalalignment='top', bbox=props)
     
-    save_figure(fig, 'fig_phase3_selection')
+    save_figure(fig, 'fig_phase5_selection')
 
 
 # =============================================================================
-# DIAGRAM 6: Phase 3 (Execution) - Path planning and execution
+# DIAGRAM 6: Phase 6 (Execution) - Path planning and execution
 # =============================================================================
-def fig_phase3_execution():
+def fig_phase6_execution():
     """Show path from critical point (88,1) to target (52,1)."""
     fig, ax = setup_figure(figsize=(12, 6))
     
@@ -381,7 +382,7 @@ def fig_phase3_execution():
     # Heading annotation
     ax.annotate(r'$\beta = \pi$ (West)', xy=(70, -3), fontsize=11, color='#3498db', fontweight='bold')
     
-    ax.set_title('Phase 3 (Execution)\nBacktracking Path Computation', fontsize=14, fontweight='bold')
+    ax.set_title('Phase 6 (Execution)\nBacktracking Path Computation', fontsize=14, fontweight='bold')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.legend(loc='upper right', framealpha=0.9)
@@ -395,7 +396,7 @@ def fig_phase3_execution():
     ax.text(0.02, 0.98, textstr, transform=ax.transAxes, fontsize=9,
             verticalalignment='top', bbox=props)
     
-    save_figure(fig, 'fig_phase3_execution')
+    save_figure(fig, 'fig_phase6_execution')
 
 
 def main():
@@ -405,11 +406,11 @@ def main():
     print("-" * 50)
     
     fig_phase1_movement()
-    fig_phase1_tiling()
-    fig_phase2_stuck()
-    fig_phase2_list_check()
-    fig_phase3_selection()
-    fig_phase3_execution()
+    fig_phase2_tiling()
+    fig_phase3_stuck()
+    fig_phase4_list_check()
+    fig_phase5_selection()
+    fig_phase6_execution()
     
     print("-" * 50)
     print("Done! Generated 6 diagrams.")
