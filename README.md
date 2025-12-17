@@ -23,16 +23,16 @@ pip install numpy matplotlib pillow
 From this folder:
 
 ```bash
-python scripts/run_unified.py --outdir outputs_unified
+python scripts/run.py --outdir outputs
 ```
 
 Outputs:
 
-- `outputs_unified/fig01_map.png`
-- `outputs_unified/fig02_full_run.png`
-- `outputs_unified/fig03_candidates.png` (only if backtracking occurs)
-- `outputs_unified/fig04_astar_vs_smooth.png` (only if backtracking occurs)
-- `outputs_unified/summary.json`
+- `outputs/fig01_map.png`
+- `outputs/fig02_full_run.png`
+- `outputs/fig03_candidates.png` (only if backtracking occurs)
+- `outputs/fig04_astar_vs_smooth.png` (only if backtracking occurs)
+- `outputs/summary.json`
 
 ## Notes
 
