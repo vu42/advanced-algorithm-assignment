@@ -312,12 +312,16 @@ BA* maintains a list $L$ of candidate tiles that may serve as future starting po
 
 ### Neighbor indexing
 The 8-neighborhood of a tile $s$ is defined as:
+
 $$
 N(s)=\{s_1,s_2,s_3,s_4,s_5,s_6,s_7,s_8\},
 $$
+
+The 4-neighborhood is
 corresponding to **east, north-east, north, north-west, west, south-west, south, south-east**.
 
 The 4-neighborhood is:
+
 $$
 N_8(s)=N(s),\qquad N_4(s)=\{s_1,s_3,s_5,s_7\}
 $$
@@ -538,15 +542,17 @@ $$
 1. Initialize $M=\varnothing$.
 2. Perform one boustrophedon motion (BM) to cover the current region; stop BM when the robot reaches a critical point $s_{cp}$. 
 3. At $s_{cp}$, construct the backtracking list
-   $$
-   L={, s \mid s\in M \ \text{and}\ \mu(s)\ge 1 ,}
-   $$
+
+$$
+L={, s \mid s\in M \ \text{and}\ \mu(s)\ge 1 ,}
+$$
 
 4. If $L=\varnothing$, terminate (complete coverage ends). 
 5. Select the next starting point
-   $$
-   s_{sp}=\arg\min_{s\in L} f(s,s_{cp}).
-   $$
+
+$$
+s_{sp}=\arg\min_{s\in L} f(s,s_{cp}).
+$$
 
 6. Run A* on the tiling model $M$ to find a collision-free discrete path from $s_{cp}$ to $s_{sp}$. 
 7. Smooth/shorten that path using A*SPT to obtain $\hat{P}$. 
