@@ -39,7 +39,7 @@ def main() -> int:
     # Figure 1: map
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(7, 7))
-    viz.plot_map(scenario.grid, ax=ax, title="Unified scenario map (ground truth)")
+    viz.plot_map(scenario.grid, ax=ax, title="Scenario map (ground truth)")
     viz.save_fig(str(outdir / "fig01_map.png"))
 
     # Figure 2: map with overlay cells (covered cells)
