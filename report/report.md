@@ -533,6 +533,26 @@ $$
 4.  **Execute:**
     The robot rotates by $\alpha$ and moves forward $d$ units. It arrives at $(52, 1)$, completes the backtracking phase, and is ready to start a new coverage sweep.
 
+## Full BA* loop - Pseudocode
+
+1. Initialize $M=\varnothing$.
+2. Perform one boustrophedon motion (BM) to cover the current region; stop BM when the robot reaches a critical point $s_{cp}$. 
+3. At $s_{cp}$, construct the backtracking list
+   $$
+   L={, s \mid s\in M \ \text{and}\ \mu(s)\ge 1 ,}.
+   $$
+
+4. If $L=\varnothing$, terminate (complete coverage ends). 
+5. Select the next starting point
+   $$
+   s_{sp}=\arg\min_{s\in L} f(s,s_{cp}).
+   $$
+
+6. Run A* on the tiling model $M$ to find a collision-free discrete path from $s_{cp}$ to $s_{sp}$. 
+7. Smooth/shorten that path using A*SPT to obtain $\hat{P}$. 
+8. Follow $\hat{P}$ from $s_{cp}$ to $s_{sp}$. 
+9. Adjust heading at $s_{sp}$, then go back to Step 2 for the next BM. 
+
 ## Implementation Details
 
 This section describes how BA* is implemented in the accompanying codebase.
@@ -709,7 +729,7 @@ If `inflate_obstacles > 0`, the ground truth grid is inflated by a square neighb
 
 ### Reproducibility and outputs for the unified scenario
 
-`run_unified.py` reproduces the unified run and writes:
+`run.py` reproduces the unified run and writes:
 
 * `outputs/summary.json` with the run statistics and first backtracking event fields.
 
