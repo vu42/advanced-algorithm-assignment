@@ -33,7 +33,7 @@ This section presents the BA* algorithm as used in our implementation. The metho
 
 To illustrate every step of the algorithm, we will track a single scenario:
 
-* **Unified Scenario:** A robot named "Bot" with radius $r=5$ (diameter $10$) operates in a room.
+* **Scenario:** A robot named "Bot" with radius $r=5$ (diameter $10$) operates in a room.
 * **Phase 1 (Start):** Bot starts at $(12, 75)$ facing East.
 * **Phase 2 (Stuck):** Later, Bot ends up at $(88, 1)$ and gets stuck (Critical Point).
 * **Phase 3 (Recovery):** Bot calculates a plan to return to a safe spot at $(52, 1)$.
@@ -116,7 +116,7 @@ BA* uses a discrete heading set aligned with the four cardinal directions. In th
 * West: $\pi$
 * South: $-\pi/2$
 
-### Unified Example: Phase 1 (Movement)
+### Example: Phase 1 (Movement)
 
 ![Phase 1 Movement](../outputs/fig_phase1_movement.png)
 
@@ -248,7 +248,7 @@ $$
 The key invariant emphasized in this report is:
 * **Covered at most once:** a tile becomes covered when first swept by boustrophedon motion and is never “uncovered” again.
 
-### Unified Example: Phase 2 (Tiling)
+### Example: Phase 2 (Tiling)
 
 ![Phase 2 Tiling](../outputs/fig_phase2_tiling.png)
 
@@ -289,7 +289,7 @@ Where:
 
 > **Semantic translation:** "Tile $s$ is critical **if and only if** **all** four neighbors are **blocked**."
 
-### Unified Example: Phase 3 (Stuck)
+### Example: Phase 3 (Stuck)
 
 ![Phase 3 Stuck](../outputs/fig_phase3_stuck.png)
 
@@ -380,7 +380,7 @@ $$
 L=\{ s \mid s\in M \text{ and } \mu(s)\ge 1 \}
 $$
 
-### Unified Example: Phase 4 (List Check)
+### Example: Phase 4 (List Check)
 
 ![Phase 4 List Check](../outputs/fig_phase4_list_check.png)
 
@@ -441,7 +441,7 @@ The robot doesn't just measure a straight line through walls. It calculates the 
 
 ---
 
-### Unified Example: Phase 5 (Selection)
+### Example: Phase 5 (Selection)
 
 ![Phase 5 Selection](../outputs/fig_phase5_selection.png)
 
@@ -508,7 +508,7 @@ $$
 
 ---
 
-### Unified Example: Phase 6 (Execution)
+### Example: Phase 6 (Execution)
 
 ![Phase 6 Execution](../outputs/fig_phase6_execution.png)
 
@@ -691,7 +691,7 @@ The A* implementation returns:
 1. `EUCLIDEAN`: pick the candidate minimizing Euclidean distance to $s_{cp}$.
 2. `A_STAR`: for each candidate $s \in L$, run A* from $s_{cp}$ to $s$ on the covered graph and choose the one with minimum returned `cost` among reachable candidates.
 
-If no candidates exist, or none are reachable by A*, the planner terminates (because `stop_if_no_candidates=True` in `run_unified.py`).
+If no candidates exist, or none are reachable by A*, the planner terminates (because `stop_if_no_candidates=True` in `run.py`).
 
 ### A*SPT like smoothing and line of sight rule
 
@@ -733,7 +733,7 @@ If none are available, heading is unchanged.
 
 If `inflate_obstacles > 0`, the ground truth grid is inflated by a square neighborhood around each obstacle cell (`inflate_obstacles(radius_cells)`), and planning runs on the inflated grid.
 
-### Reproducibility and outputs for the unified scenario
+### Reproducibility and outputs for the scenario
 
 `run.py` reproduces the unified run and writes:
 
@@ -745,7 +745,7 @@ If `inflate_obstacles > 0`, the ground truth grid is inflated by a square neighb
 
 ![Ground truth map](../outputs/fig01_map.png)
 
-Ground truth occupancy grid for the unified scenario. Black cells are obstacles (outer boundary walls plus internal walls and a rectangular block); white cells are free space. Axes show tile indices.
+Ground truth occupancy grid for the scenario. Black cells are obstacles (outer boundary walls plus internal walls and a rectangular block); white cells are free space. Axes show tile indices.
 
 **Figure 2: Overlay Cells**
 
@@ -757,7 +757,7 @@ Same map as Figure 1, with the set of cells marked covered during the BA* run ov
 
 ![Trajectory and covered cells](../outputs/fig03_full_run.png)
 
-Trajectory of the robot over the unified scenario, drawn as a polyline over the map. The red dot marks the start location (consistent with the unified run start), and the dense vertical sweep pattern illustrates boustrophedon style coverage.
+Trajectory of the robot over the scenario, drawn as a polyline over the map. The red dot marks the start location (consistent with the unified run start), and the dense vertical sweep pattern illustrates boustrophedon style coverage.
 
 **Figure 4: Candidate Selection**
 
