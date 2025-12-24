@@ -223,9 +223,9 @@ def fig_phase3_stuck():
 
 
 # =============================================================================
-# DIAGRAM 4: Phase 4 (List Check) - Backtracking candidate eligibility
+# DIAGRAM 4: Phase 4 (List Construct) - Backtracking candidate eligibility
 # =============================================================================
-def fig_phase4_list_check():
+def fig_phase4_list_construct():
     """Show tile (52,1) as a backtracking candidate."""
     fig, ax = setup_figure(figsize=(10, 8))
     
@@ -258,7 +258,7 @@ def fig_phase4_list_check():
     # Mark center
     ax.plot(52, 1, 'g*', markersize=15, label='s = (52, 1)')
     
-    ax.set_title('Phase 4 (List Check)\nBacktracking Candidate Eligibility', fontsize=14, fontweight='bold')
+    ax.set_title('Phase 4 (List Construct)\nBacktracking Candidate Eligibility', fontsize=14, fontweight='bold')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.legend(loc='upper right', framealpha=0.9)
@@ -274,7 +274,7 @@ def fig_phase4_list_check():
     ax.text(0.02, 0.98, textstr, transform=ax.transAxes, fontsize=10,
             verticalalignment='top', bbox=props)
     
-    save_figure(fig, 'fig_phase4_list_check')
+    save_figure(fig, 'fig_phase4_list_construct')
 
 
 # =============================================================================
@@ -408,7 +408,7 @@ def main():
     fig_phase1_movement()
     fig_phase2_tiling()
     fig_phase3_stuck()
-    fig_phase4_list_check()
+    fig_phase4_list_construct()
     fig_phase5_selection()
     fig_phase6_execution()
     
