@@ -84,10 +84,14 @@ This section presents the BA* algorithm as used in our implementation. The metho
 
 To illustrate every step of the algorithm, we will track a single scenario:
 
-* **Scenario:** A robot named "Bot" with radius $r=5$ (diameter $10$) operates in a room.
-* **Phase 1 (Start):** Bot starts at $(12, 75)$ facing East.
-* **Phase 2 (Stuck):** Later, Bot ends up at $(88, 1)$ and gets stuck (Critical Point).
-* **Phase 3 (Recovery):** Bot calculates a plan to return to a safe spot at $(52, 1)$.
+* **Scenario:** A robot named “Bot” with radius (r=5) (diameter (10)) operates in a room.
+* **Phase 1 (Start):** Bot starts at ((12,75)) facing East.
+* **Phase 2 (Movement and Tiling):** Bot performs boustrophedon sweeping, gradually discovering free space and obstacles while marking visited tiles.
+* **Phase 3 (Stuck):** Bot later ends up at ((88,1)) and gets stuck at a Critical Point.
+* **Phase 4 (List Construction):** During sweeping, Bot detects candidate restart points (for example, boundary corner tiles) and inserts them into the list (L) according to the algorithm’s condition. This list (L) will be used later for selecting a restart point after the robot gets stuck.
+* **Phase 5 (Selection):** Bot selects a safe restart point (s_{sp}=(52,1)) from the list (L) using the chosen criterion (for example, shortest backtracking distance).
+* **Phase 6 (Execution and Smoothing):** Bot plans a path from ((88,1)) to ((52,1)) (for example, A* on the tiling graph), optionally smooths it using line of sight, then executes the motion to reach ((52,1)) and starts the next sweep.
+
 
 Run summary (from `summary.json`):
 
@@ -431,9 +435,9 @@ $$
 L=\{ s \mid s\in M \text{ and } \mu(s)\ge 1 \}
 $$
 
-### Example: Phase 4 (List Check)
+### Example: Phase 4 (List Construction)
 
-![Phase 4 List Check](../outputs/fig_phase4_list_check.png)
+![Phase 4 List Construction](../outputs/fig_phase4_list_construct.png)
 
 **Scenario:** The robot is stuck at $(88, 1)$, so it checks its accumulated knowledge to form backtracking candidates. In the run summary, the selected starting point is $(52, 1)$.
 
